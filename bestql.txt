@@ -3,7 +3,7 @@ Tries to find an item's best QLs by calculating the breakpoints.
 To find the lowest QLs for all bonuses:
 <tab><highlight><symbol>bestql 'low ql' 'lowql bonus' 'high ql' 'highql bonus'<end>
 
-To find the highest usable QL:
+To find the highest usable QL for an item:
 <tab><highlight><symbol>bestql 'low ql' 'lowql requirement' 'high ql' 'highql requirement' 'my stat'<end>
 
 <header2>Examples:<end>
@@ -35,4 +35,4 @@ Carbonum armor. Agility requirement at QL 1 is 8 at QL 200 it's 476. Our agility
 
 <tab>The highest QL is <highlight>82<end> with a requirement of <highlight>198<end>.
 
-Note: in order to get the best results, it's important to get the correct QLs of an item. The <highlight><symbol>items<end> command should work in most cases, but <a href=https://aoitems.com/home/>AOItems</a> might be better.
+Note: in order to get the best results, it's important to get the correct QLs of an item. The <highlight><symbol>items<end> command should work in most cases, but <a href='chatcmd:///start https://aoitems.com/home/'>AOItems</a> might be better.
