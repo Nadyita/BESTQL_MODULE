@@ -80,7 +80,7 @@ class BestQLController {
 		$numFoundItems = 0;
 		$oldRequirement = 0;
 		$maxAttribute = $specPairs[count($specPairs)-1];
-		for ($searchedQL = 1; $searchedQL <= max(array_keys($itemSpecs)); $searchedQL++) {
+		for ($searchedQL = min(array_keys($itemSpecs)); $searchedQL <= max(array_keys($itemSpecs)); $searchedQL++) {
 			$value = $this->calcStatFromQL($itemSpecs, $searchedQL);
 			if ($value === false) {
 				$msg = "I was unable to find any breakpoints for the given stats.";
