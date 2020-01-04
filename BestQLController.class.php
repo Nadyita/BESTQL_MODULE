@@ -40,7 +40,7 @@ class BestQLController {
 	 * @param int $searchedQL The QL we want to interpolate to
 	 * @return int|bool The interpolated bonus at the given QL or false if out of range
 	 */
-	function calcStatFromQL($itemSpecs, $searchedQL) {
+	public function calcStatFromQL($itemSpecs, $searchedQL) {
 		foreach ($itemSpecs as $itemQL => $itemBonus) {
 			if (!isset($lastSpec)) {
 				$lastSpec = [$itemQL, $itemBonus];
@@ -59,9 +59,15 @@ class BestQLController {
 	/**
 	 * @HandlesCommand("bestql")
 	 * @Matches("/^bestql ([0-9 ]+)$/i")
+	 * @Matches("{^bestql ([0-9 ]+) (<a href=(?:&#39;|'|\x22)itemref://\d+/\d+/\d+(?:&#39;|'|\x22)>[^<]+</a>)$}i")
 	 */
 	public function bestqlCommand($message, $channel, $sender, $sendto, $args) {
 		$itemSpecs = [];
+		$itemToScale = null;
+		if (count($args) > 2) {
+			$itemPattern = "{<a href=(?:&#39;|'|\")itemref://(\d+)/(\d+)/(\d+)(?:&#39;|'|\")>([^<]+)</a>}";
+			preg_match($itemPattern, $args[2], $itemToScale);
+		}
 		$specPairs = preg_split('/\s+/', $args[1]);
 
 		if (count($specPairs) < 4) {
@@ -96,7 +102,11 @@ class BestQLController {
 				}
 				$oldRequirement = $value;
 			} elseif ($oldValue !== $value) {
-				$msg .= sprintf("<tab>QL <highlight>%'_3d<end> has stat <highlight>%d<end>.\n", $searchedQL, $value);
+				$msg .= sprintf("<tab>QL <highlight>%'_3d<end> has stat <highlight>%d<end>.", $searchedQL, $value);
+				if ($itemToScale) {
+					$msg .= " " . $this->text->makeItem($itemToScale[1], $itemToScale[2], $searchedQL, $itemToScale[4]);
+				}
+				$msg .= "\n";
 				$numFoundItems++;
 				$oldValue = $value;
 			}
