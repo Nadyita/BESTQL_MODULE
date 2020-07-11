@@ -1,12 +1,9 @@
 <?php
 
-namespace Budabot\User\Modules;
-
-use Budabot\Core\xml;
+namespace Budabot\User\Modules\BESTQL_MODULE;
 
 /**
- * Authors:
- *	- Nadyita (RK5)
+ * @author Nadyita (RK5) <nadyita@hodorraid.org>
  *
  * @Instance
  *
@@ -27,10 +24,16 @@ class BestQLController {
 	 */
 	public $moduleName;
 
-	/** @Inject */
+	/**
+	 * @Inject
+	 * @var \Budabot\Core\Text $text
+	 */
 	public $text;
 
-	/** @Inject */
+	/**
+	 * @Inject
+	 * @var \Budabot\Core\SettingManager $settingManager
+	 */
 	public $settingManager;
 
 	/**
@@ -41,8 +44,9 @@ class BestQLController {
 	 * @return int|bool The interpolated bonus at the given QL or false if out of range
 	 */
 	public function calcStatFromQL($itemSpecs, $searchedQL) {
+		$lastSpec = null;
 		foreach ($itemSpecs as $itemQL => $itemBonus) {
-			if (!isset($lastSpec)) {
+			if ($lastSpec === null) {
 				$lastSpec = [$itemQL, $itemBonus];
 			} else {
 				if ($lastSpec[0] <= $searchedQL && $itemQL >= $searchedQL) {
@@ -86,6 +90,7 @@ class BestQLController {
 		$numFoundItems = 0;
 		$oldRequirement = 0;
 		$maxAttribute = $specPairs[count($specPairs)-1];
+		$oldValue = null;
 		for ($searchedQL = min(array_keys($itemSpecs)); $searchedQL <= max(array_keys($itemSpecs)); $searchedQL++) {
 			$value = $this->calcStatFromQL($itemSpecs, $searchedQL);
 			if ($value === false) {
